@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api")
@@ -26,7 +27,7 @@ public class VehicleDetailsController {
     }
 
     @PostMapping("/vehicle-details")
-    public ResponseEntity<VehicleDetailsDTO> createVehicleDetails(@RequestBody VehicleDetailsDTO vehicleDetailsDTO) {
+    public ResponseEntity<VehicleDetailsDTO> createVehicleDetails(@RequestBody @Valid VehicleDetailsDTO vehicleDetailsDTO) {
         VehicleModel vehicleModel = vehicleModelRepository.findById(vehicleDetailsDTO.getVehicleModelId())
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle model with id " + vehicleDetailsDTO.getVehicleModelId() + " not found"));
 
