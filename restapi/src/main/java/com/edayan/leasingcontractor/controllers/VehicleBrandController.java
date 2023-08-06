@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 //Ideally should support versioning
 @RequestMapping("/api")
-public class VehicleController {
+public class VehicleBrandController {
 
     private final VehicleBrandRepository vehicleBrandRepository;
     private final VehicleBrandAssembler vehicleBrandAssembler;
@@ -31,10 +31,10 @@ public class VehicleController {
     private final VehicleModelAssembler vehicleModelAssembler;
 
     @Autowired
-    public VehicleController(VehicleBrandRepository vehicleBrandRepository,
-                             VehicleBrandAssembler vehicleBrandAssembler,
-                             VehicleModelRepository vehicleModelRepository,
-                             VehicleModelAssembler vehicleModelAssembler) {
+    public VehicleBrandController(VehicleBrandRepository vehicleBrandRepository,
+                                  VehicleBrandAssembler vehicleBrandAssembler,
+                                  VehicleModelRepository vehicleModelRepository,
+                                  VehicleModelAssembler vehicleModelAssembler) {
         this.vehicleBrandRepository = vehicleBrandRepository;
         this.vehicleBrandAssembler = vehicleBrandAssembler;
         this.vehicleModelRepository = vehicleModelRepository;

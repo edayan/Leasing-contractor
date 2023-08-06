@@ -1,7 +1,7 @@
 package com.edayan.leasingcontractor.models.assemblers;
 
 
-import com.edayan.leasingcontractor.controllers.VehicleController;
+import com.edayan.leasingcontractor.controllers.VehicleBrandController;
 import com.edayan.leasingcontractor.models.VehicleModelDTO;
 import com.edayan.leasingcontractor.repository.entities.VehicleModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -13,7 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class VehicleModelAssembler extends RepresentationModelAssemblerSupport<VehicleModel, VehicleModelDTO> {
     public VehicleModelAssembler() {
-        super(VehicleController.class, VehicleModelDTO.class);
+        super(VehicleBrandController.class, VehicleModelDTO.class);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class VehicleModelAssembler extends RepresentationModelAssemblerSupport<V
         dto.setModelName(entity.getModelName());
         dto.setBrand(entity.getBrand().getBrandName());
 
-        dto.add(linkTo(methodOn(VehicleController.class).getModelByBrand(entity.getId())).withSelfRel());
+        dto.add(linkTo(methodOn(VehicleBrandController.class).getModelByBrand(entity.getId())).withSelfRel());
 
         return dto;
     }
