@@ -7,6 +7,7 @@ HELP.md
 
 
 ### IntelliJ IDEA ###
+.idea/
 /restapi/.idea/
 /restapi/*.iws
 /restapi/*.iml
