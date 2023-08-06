@@ -1,19 +1,19 @@
 HELP.md
-/leasingcontractor/.gradle
-/leasingcontractor/build/
-!/leasingcontractor/gradle/wrapper/gradle-wrapper.jar
-!**/leasingcontractor/src/main/**/build/
-!**/leasingcontractor/src/test/**/build/
+/restapi/.gradle
+/restapi/build/
+!/restapi/gradle/wrapper/gradle-wrapper.jar
+!**/restapi/src/main/**/build/
+!**/restapi/src/test/**/build/
 
 
 ### IntelliJ IDEA ###
-/leasingcontractor/.idea
-/leasingcontractor/*.iws
-/leasingcontractor/*.iml
-/leasingcontractor/*.ipr
-/leasingcontractor/out/
-!**/leasingcontractor/src/main/**/out/
-!**/leasingcontractor/src/test/**/out/
+/restapi/.idea/
+/restapi/*.iws
+/restapi/*.iml
+/restapi/*.ipr
+/restapi/out/
+!**/restapi/src/main/**/out/
+!**/restapi/src/test/**/out/
 
 
 ### VS Code ###
