@@ -1,0 +1,20 @@
+HELP.md
+/leasing-contractor/.gradle
+/leasing-contractor/build/
+!/leasing-contractor/gradle/wrapper/gradle-wrapper.jar
+!**/leasing-contractor/src/main/**/build/
+!**/leasing-contractor/src/test/**/build/
+
+
+### IntelliJ IDEA ###
+/leasing-contractor/.idea
+/leasing-contractor/*.iws
+/leasing-contractor/*.iml
+/leasing-contractor/*.ipr
+/leasing-contractor/out/
+!**/leasing-contractor/src/main/**/out/
+!**/leasing-contractor/src/test/**/out/
+
+
+### VS Code ###
+.vscode/
