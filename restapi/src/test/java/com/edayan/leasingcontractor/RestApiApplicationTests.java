@@ -1,4 +1,4 @@
-package com.edayan.leasingcontractor.restapi;
+package com.edayan.leasingcontractor;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
