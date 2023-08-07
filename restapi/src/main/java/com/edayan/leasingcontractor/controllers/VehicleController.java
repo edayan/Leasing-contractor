@@ -55,7 +55,7 @@ public class VehicleController {
     }
 
     @PutMapping("/vehicles/{id}")
-    public ResponseEntity<VehicleResource> updateVehicleDetails(@PathVariable Long id, @RequestBody VehicleResource updatedDetailsDTO) {
+    public ResponseEntity<VehicleResource> updateVehicleDetails(@PathVariable Long id, @RequestBody @Valid VehicleResource updatedDetailsDTO) {
         Vehicle existingDetails = vehicleDetailsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle details with id " + id + " not found"));
 
