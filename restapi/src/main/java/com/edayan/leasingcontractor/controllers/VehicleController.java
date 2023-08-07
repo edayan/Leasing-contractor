@@ -1,6 +1,6 @@
 package com.edayan.leasingcontractor.controllers;
 
-import com.edayan.leasingcontractor.models.VehicleDTO;
+import com.edayan.leasingcontractor.models.VehicleResource;
 import com.edayan.leasingcontractor.models.assemblers.VehicleAssembler;
 import com.edayan.leasingcontractor.repository.VehicleDetailsRepository;
 import com.edayan.leasingcontractor.repository.VehicleModelRepository;
@@ -30,8 +30,8 @@ public class VehicleController {
     }
 
     @GetMapping("/vehicles")
-    public ResponseEntity<CollectionModel<VehicleDTO>> getVehicleDetails() {
-        List<VehicleDTO> vehicles = vehicleDetailsRepository.findAll().stream()
+    public ResponseEntity<CollectionModel<VehicleResource>> getVehicleDetails() {
+        List<VehicleResource> vehicles = vehicleDetailsRepository.findAll().stream()
                 .map(vehicleAssembler::toModel)
                 .collect(Collectors.toList());
 
@@ -39,23 +39,23 @@ public class VehicleController {
     }
 
     @PostMapping("/vehicles")
-    public ResponseEntity<VehicleDTO> createVehicleDetails(@RequestBody @Valid VehicleDTO vehicleDTO) {
-        VehicleModel vehicleModel = vehicleModelRepository.findById(vehicleDTO.getVehicleModelId())
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle model with id " + vehicleDTO.getVehicleModelId() + " not found"));
+    public ResponseEntity<VehicleResource> createVehicleDetails(@RequestBody @Valid VehicleResource vehicleResource) {
+        VehicleModel vehicleModel = vehicleModelRepository.findById(vehicleResource.getVehicleModelId())
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle model with id " + vehicleResource.getVehicleModelId() + " not found"));
 
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleModel(vehicleModel);
-        vehicle.setYear(vehicleDTO.getYear());
-        vehicle.setVin(vehicleDTO.getVin());
-        vehicle.setPrice(vehicleDTO.getPrice());
+        vehicle.setYear(vehicleResource.getYear());
+        vehicle.setVin(vehicleResource.getVin());
+        vehicle.setPrice(vehicleResource.getPrice());
 
         Vehicle savedDetails = vehicleDetailsRepository.save(vehicle);
-        VehicleDTO responseDTO = vehicleAssembler.toModel(savedDetails);
+        VehicleResource responseDTO = vehicleAssembler.toModel(savedDetails);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/vehicles/{id}")
-    public ResponseEntity<VehicleDTO> updateVehicleDetails(@PathVariable Long id, @RequestBody VehicleDTO updatedDetailsDTO) {
+    public ResponseEntity<VehicleResource> updateVehicleDetails(@PathVariable Long id, @RequestBody VehicleResource updatedDetailsDTO) {
         Vehicle existingDetails = vehicleDetailsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle details with id " + id + " not found"));
 
@@ -68,7 +68,7 @@ public class VehicleController {
         existingDetails.setPrice(updatedDetailsDTO.getPrice());
 
         Vehicle savedDetails = vehicleDetailsRepository.save(existingDetails);
-        VehicleDTO responseDTO = vehicleAssembler.toModel(savedDetails);
+        VehicleResource responseDTO = vehicleAssembler.toModel(savedDetails);
         return ResponseEntity.ok(responseDTO);
     }
 }

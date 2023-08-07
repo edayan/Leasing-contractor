@@ -1,7 +1,7 @@
 package com.edayan.leasingcontractor.controllers;
 
-import com.edayan.leasingcontractor.models.VehicleBrandDTO;
-import com.edayan.leasingcontractor.models.VehicleModelDTO;
+import com.edayan.leasingcontractor.models.VehicleBrandResource;
+import com.edayan.leasingcontractor.models.VehicleModelResource;
 import com.edayan.leasingcontractor.models.assemblers.VehicleBrandAssembler;
 import com.edayan.leasingcontractor.models.assemblers.VehicleModelAssembler;
 import com.edayan.leasingcontractor.repository.VehicleBrandRepository;
@@ -42,8 +42,8 @@ public class VehicleBrandController {
     }
 
     @GetMapping("/vehicle-brands")
-    public ResponseEntity<CollectionModel<VehicleBrandDTO>> getAllVehicleBrands() {
-        List<VehicleBrandDTO> vehicleBrands = vehicleBrandRepository.findAll().stream()
+    public ResponseEntity<CollectionModel<VehicleBrandResource>> getAllVehicleBrands() {
+        List<VehicleBrandResource> vehicleBrands = vehicleBrandRepository.findAll().stream()
                 .map(vehicleBrandAssembler::toModel)
                 .collect(Collectors.toList());
 
@@ -51,21 +51,21 @@ public class VehicleBrandController {
     }
 
     @GetMapping("/vehicle-brands/{id}")
-    public ResponseEntity<EntityModel<VehicleBrandDTO>> getVehicleBrand(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<VehicleBrandResource>> getVehicleBrand(@PathVariable Long id) {
         VehicleBrand vehicleBrand = vehicleBrandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle brand with id " + id + " not found"));
 
-        VehicleBrandDTO vehicleBrandDTO = vehicleBrandAssembler.toModel(vehicleBrand);
+        VehicleBrandResource vehicleBrandResource = vehicleBrandAssembler.toModel(vehicleBrand);
 
-        return ResponseEntity.ok(EntityModel.of(vehicleBrandDTO));
+        return ResponseEntity.ok(EntityModel.of(vehicleBrandResource));
     }
 
     @GetMapping("/vehicle-brands/{id}/models")
-    public ResponseEntity<CollectionModel<VehicleModelDTO>> getModelByBrand(@PathVariable Long id) {
+    public ResponseEntity<CollectionModel<VehicleModelResource>> getModelByBrand(@PathVariable Long id) {
         VehicleBrand vehicleBrand = vehicleBrandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle brand with id " + id + " not found"));
 
-        List<VehicleModelDTO> vehicleModels = vehicleModelRepository.findByBrand(vehicleBrand).stream()
+        List<VehicleModelResource> vehicleModels = vehicleModelRepository.findByBrand(vehicleBrand).stream()
                 .map(vehicleModelAssembler::toModel)
                 .collect(Collectors.toList());
 

@@ -4,6 +4,6 @@ import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
-public class VehicleBrandDTO extends RepresentationModel<VehicleBrandDTO> {
+public class VehicleBrandResource extends RepresentationModel<VehicleBrandResource> {
     private String brandName;
 }
