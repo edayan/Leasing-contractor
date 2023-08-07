@@ -19,7 +19,6 @@ public class VehicleBrandAssembler extends RepresentationModelAssemblerSupport<V
     public VehicleBrandDTO toModel(VehicleBrand entity) {
         VehicleBrandDTO dto = instantiateModel(entity);
 
-        dto.setId(entity.getId());
         dto.setBrandName(entity.getBrandName());
 
         dto.add(linkTo(methodOn(VehicleBrandController.class).getVehicleBrand(entity.getId())).withRel("brandDetails"));

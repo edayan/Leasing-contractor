@@ -24,5 +24,11 @@ services:
       MYSQL_DATABASE: leaser_contract
       MYSQL_USER: leaser
       MYSQL_PASSWORD: leaser@contract
+    volumes:
+      - my-datavolume:/var/lib/mysql
     ports:
       - "3306:3306"
+
+
+volumes:
+  my-datavolume:

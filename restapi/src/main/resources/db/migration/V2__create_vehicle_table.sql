@@ -1,4 +1,4 @@
-CREATE TABLE vehicle_details (
+CREATE TABLE vehicle (
                                  id INT PRIMARY KEY AUTO_INCREMENT,
                                  vehicle_model_id INT NOT NULL,
                                  year INT NOT NULL,

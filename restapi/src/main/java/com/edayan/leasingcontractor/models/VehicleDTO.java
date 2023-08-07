@@ -6,8 +6,7 @@ import org.springframework.hateoas.RepresentationModel;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class VehicleDetailsDTO extends RepresentationModel<VehicleDetailsDTO> {
-    private Long id;
+public class VehicleDTO extends RepresentationModel<VehicleDTO> {
 
     @NotNull(message = "Vehicle model ID is required")
     private Long vehicleModelId;
