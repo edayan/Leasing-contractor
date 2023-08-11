@@ -5,7 +5,9 @@ import com.edayan.leasingcontractor.models.UserResource;
 import com.edayan.leasingcontractor.models.assemblers.UserResourceAssembler;
 import com.edayan.leasingcontractor.repository.UserRepository;
 import com.edayan.leasingcontractor.repository.entities.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -29,6 +32,9 @@ public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private UserRepository userRepository;
@@ -77,5 +83,24 @@ public class UserControllerTest {
         verify(userResourceAssembler, times(1)).toModel(user2);
         verifyNoMoreInteractions(userRepository);
         verifyNoMoreInteractions(userResourceAssembler);
+    }
+
+    @Test
+    public void testCreateUser() throws Exception {
+        UserResource userResource = new UserResource();
+        userResource.setFirstName("Saju");
+        userResource.setLastName("Edayan");
+        userResource.setBirthDate(LocalDate.of(1990, 1, 15));
+
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
+        when(userResourceAssembler.toModel(Mockito.any(User.class))).thenReturn(userResource);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userResource)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Saju"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Edayan"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.birthDate").value("1990-01-15"));
     }
 }
