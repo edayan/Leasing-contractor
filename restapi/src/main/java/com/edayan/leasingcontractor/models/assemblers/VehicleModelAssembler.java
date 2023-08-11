@@ -19,6 +19,7 @@ public class VehicleModelAssembler extends RepresentationModelAssemblerSupport<V
     @Override
     public VehicleModelResource toModel(VehicleModel entity) {
         VehicleModelResource dto = instantiateModel(entity);
+        dto.setId(entity.getId());
         dto.setModelName(entity.getModelName());
         dto.setBrand(entity.getBrand().getBrandName());
 

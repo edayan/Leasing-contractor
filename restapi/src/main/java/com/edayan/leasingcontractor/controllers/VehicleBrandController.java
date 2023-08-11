@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-//Ideally should support versioning
+//Ideally should support versioning like /api/v1. but not in the requirement.
 @RequestMapping("/api")
 public class VehicleBrandController {
 
