@@ -1,6 +1,7 @@
 package com.edayan.leasingcontractor.models;
 
 import com.edayan.leasingcontractor.controllers.IndexController;
+import com.edayan.leasingcontractor.controllers.UserController;
 import com.edayan.leasingcontractor.controllers.VehicleBrandController;
 import com.edayan.leasingcontractor.controllers.VehicleController;
 import org.springframework.hateoas.Link;
@@ -15,7 +16,8 @@ public class RootResource extends RepresentationModel<RootResource> {
         Link vehicleBrandsLink = linkTo(methodOn(VehicleBrandController.class).getAllVehicleBrands()).withRel("vehicleBrands");
 
         Link vehiclesLink = linkTo(methodOn(VehicleController.class).getVehicleDetails()).withRel("vehicles");
+        Link usersLink = linkTo(methodOn(UserController.class).getAllUsers()).withRel("users");
 
-        add(selfLink, vehicleBrandsLink, vehiclesLink);
+        add(selfLink, vehicleBrandsLink, vehiclesLink, usersLink);
     }
 }
