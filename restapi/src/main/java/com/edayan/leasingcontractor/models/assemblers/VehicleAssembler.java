@@ -27,6 +27,7 @@ public class VehicleAssembler extends RepresentationModelAssemblerSupport<Vehicl
 
     private VehicleResource convertToDto(Vehicle entity) {
         VehicleResource dto = new VehicleResource();
+        dto.setId(entity.getId());
         dto.setVehicleModelId(entity.getVehicleModel().getId());
         dto.setYear(entity.getYear());
         dto.setVin(entity.getVin());

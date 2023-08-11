@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class VehicleResource extends RepresentationModel<VehicleResource> {
 
+    private Long id;
+
     @NotNull(message = "Vehicle model ID is required")
     private Long vehicleModelId;
 
