@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class UserResource extends RepresentationModel<UserResource> {
+public class CustomerResource extends RepresentationModel<CustomerResource> {
     private Long id;
 
     @NotNull(message = "firstName is required")
