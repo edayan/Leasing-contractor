@@ -26,6 +26,8 @@ public class LeasingContractResourceAssembler extends RepresentationModelAssembl
         leasingContractResource.setCustomerId(entity.getCustomer().getId());
 
         leasingContractResource.add(linkTo(methodOn(LeasingContractController.class).getAllLeasingContracts()).withSelfRel());
+        leasingContractResource.add(linkTo(methodOn(LeasingContractController.class).updateLeasingContract(entity.getId(), null)).withRel("update"));
+
         return leasingContractResource;
     }
 }
