@@ -14,8 +14,8 @@ public class RootResource extends RepresentationModel<RootResource> {
 
         Link vehiclesLink = linkTo(methodOn(VehicleController.class).getVehicleDetails()).withRel("vehicles");
         Link customersLink = linkTo(methodOn(CustomerController.class).getAllCustomers()).withRel("customers");
-//        Link leasgingContractsLink = linkTo(methodOn(LeasingContractController.class).createLeasingContract()).withRel("leasingContracts");
+        Link leasgingContractsLink = linkTo(methodOn(LeasingContractController.class).getAllLeasingContracts()).withRel("leasingContracts");
 
-        add(selfLink, vehicleBrandsLink, vehiclesLink, customersLink);
+        add(selfLink, vehicleBrandsLink, vehiclesLink, customersLink, leasgingContractsLink);
     }
 }

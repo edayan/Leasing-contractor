@@ -10,16 +10,16 @@ import com.edayan.leasingcontractor.repository.entities.Customer;
 import com.edayan.leasingcontractor.repository.entities.LeasingContract;
 import com.edayan.leasingcontractor.repository.entities.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -64,6 +64,15 @@ public class LeasingContractController {
         LeasingContractResource responseResource = leasingContractResourceAssembler.toModel(savedContract);
 
         return ResponseEntity.ok(EntityModel.of(responseResource));
+    }
+
+    @GetMapping("/leasing-contracts")
+    public ResponseEntity<CollectionModel<LeasingContractResource>> getAllLeasingContracts() {
+        List<LeasingContractResource> contracts = leasingContractRepository.findAll().stream()
+                .map(leasingContractResourceAssembler::toModel)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(contracts));
     }
 
     private LeasingContract mapResourceToEntity(LeasingContractResource leasingContractResource, Vehicle vehicle, Customer customer) {
