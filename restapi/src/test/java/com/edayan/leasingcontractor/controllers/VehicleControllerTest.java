@@ -2,6 +2,8 @@ package com.edayan.leasingcontractor.controllers;
 
 
 import com.edayan.leasingcontractor.models.VehicleDetailResource;
+import com.edayan.leasingcontractor.models.VehicleResource;
+import com.edayan.leasingcontractor.models.assemblers.VehicleAssembler;
 import com.edayan.leasingcontractor.models.assemblers.VehicleDetailAssembler;
 import com.edayan.leasingcontractor.repository.VehicleRepository;
 import com.edayan.leasingcontractor.repository.entities.Vehicle;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -19,10 +22,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,6 +39,9 @@ public class VehicleControllerTest {
 
     @MockBean
     private VehicleDetailAssembler vehicleDetailAssembler;
+
+    @MockBean
+    private VehicleAssembler vehicleAssembler;
 
     @Test
     public void testGetVehicleDetails() throws Exception {
@@ -101,5 +107,41 @@ public class VehicleControllerTest {
         verify(vehicleDetailAssembler, times(1)).toModel(vehicle1);
         verify(vehicleDetailAssembler, times(1)).toModel(vehicle2);
         verifyNoMoreInteractions(vehicleDetailAssembler);
+    }
+
+
+    @Test
+    public void testGetSingleVehicle() throws Exception {
+        Long vehicleId = 1L;
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(vehicleId);
+        vehicle.setYear(2023);
+        vehicle.setVin("VIN123");
+        vehicle.setPrice(25000);
+
+        VehicleResource vehicleResource = new VehicleResource();
+        vehicleResource.setId(vehicleId);
+        vehicleResource.setYear(2023);
+        vehicleResource.setVin("VIN123");
+        vehicleResource.setPrice(25000);
+
+        when(vehicleRepository.findById(vehicleId)).thenReturn(Optional.of(vehicle));
+        when(vehicleAssembler.toModel(vehicle)).thenReturn(vehicleResource);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/vehicles/{id}", vehicleId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaTypes.HAL_JSON_VALUE))
+                .andExpect(jsonPath("$.id").value(vehicleId))
+                .andExpect(jsonPath("$.year").value(2023))
+                .andExpect(jsonPath("$.vin").value("VIN123"))
+                .andExpect(jsonPath("$.price").value(25000))
+                .andReturn();
+
+        verify(vehicleRepository, times(1)).findById(vehicleId);
+        verifyNoMoreInteractions(vehicleRepository);
+        verify(vehicleAssembler, times(1)).toModel(vehicle);
+        verifyNoMoreInteractions(vehicleAssembler);
     }
 }

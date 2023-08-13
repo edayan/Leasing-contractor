@@ -18,10 +18,7 @@ public class VehicleAssembler extends RepresentationModelAssemblerSupport<Vehicl
     @Override
     public VehicleResource toModel(Vehicle entity) {
         VehicleResource dto = convertToDto(entity);
-
-
         dto.add(linkTo(methodOn(VehicleController.class).updateVehicleDetails(entity.getId(), dto)).withRel("update"));
-
         return dto;
     }
 

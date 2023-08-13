@@ -20,7 +20,7 @@ public class VehicleDetailAssembler extends RepresentationModelAssemblerSupport<
     public VehicleDetailResource toModel(Vehicle entity) {
         VehicleDetailResource dto = mapToVehicleDetail(entity);
 
-
+        dto.add(linkTo(methodOn(VehicleController.class).getVehicle(entity.getId())).withSelfRel());
         dto.add(linkTo(methodOn(VehicleController.class).updateVehicleDetails(entity.getId(), null)).withRel("update"));
 
         return dto;

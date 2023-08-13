@@ -220,7 +220,6 @@ GET:http://localhost:8080/api/vehicles
 {
   "_embedded": {
     "vehicleDetailResourceList": [
-      {
         "id": 1,
         "modelId": 0,
         "modelName": "Corolla",
@@ -229,6 +228,9 @@ GET:http://localhost:8080/api/vehicles
         "vin": "Cls5",
         "price": 50.0,
         "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/vehicles/1"
+          },
           "update": {
             "href": "http://localhost:8080/api/vehicles/1"
           }
@@ -239,7 +241,7 @@ GET:http://localhost:8080/api/vehicles
 }
 ```
 Use the above response to populate Vehicle id.
-
+Use Get call to `_links.self.href` for details of the vehicle
 
 
 Use RootApi and choose leasingContracts to create a post call

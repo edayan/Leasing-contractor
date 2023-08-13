@@ -46,6 +46,15 @@ public class VehicleController {
         return ResponseEntity.ok(CollectionModel.of(vehicles));
     }
 
+    @GetMapping("/vehicles/{id}")
+    public ResponseEntity<VehicleResource> getVehicle(@PathVariable Long id) {
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle with id " + id + " not found"));
+
+        VehicleResource vehicleResource = vehicleAssembler.toModel(vehicle);
+        return ResponseEntity.ok(vehicleResource);
+    }
+
     @PostMapping("/vehicles")
     public ResponseEntity<VehicleResource> createVehicleDetails(@RequestBody @Valid VehicleResource vehicleResource) {
         VehicleModel vehicleModel = vehicleModelRepository.findById(vehicleResource.getVehicleModelId())
