@@ -1,6 +1,8 @@
 package com.edayan.leasingcontractor.controllers;
 
+import com.edayan.leasingcontractor.models.LeasingContractOverviewResource;
 import com.edayan.leasingcontractor.models.LeasingContractResource;
+import com.edayan.leasingcontractor.models.assemblers.LeasingContractOverviewResourceAssembler;
 import com.edayan.leasingcontractor.models.assemblers.LeasingContractResourceAssembler;
 import com.edayan.leasingcontractor.repository.CustomerRepository;
 import com.edayan.leasingcontractor.repository.LeasingContractRepository;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +51,9 @@ public class LeasingContractControllerTest {
 
     @MockBean
     private LeasingContractResourceAssembler leasingContractResourceAssembler;
+
+    @MockBean
+    private LeasingContractOverviewResourceAssembler leasingContractOverviewResourceAssembler;
 
     @Test
     public void testCreateLeasingContract_Success() throws Exception {
@@ -130,5 +136,41 @@ public class LeasingContractControllerTest {
         verify(leasingContractResourceAssembler, times(1)).toModel(contract1);
         verify(leasingContractResourceAssembler, times(1)).toModel(contract2);
         verifyNoMoreInteractions(leasingContractResourceAssembler);
+    }
+
+    @Test
+    public void testGetLeasingContractsOverview() throws Exception {
+
+        LeasingContract leasingContract = new LeasingContract();
+
+        LeasingContractOverviewResource leasingContractResource = new LeasingContractOverviewResource();
+
+        when(leasingContractRepository.findAll()).thenReturn(Collections.singletonList(leasingContract));
+        when(leasingContractOverviewResourceAssembler.toModel(leasingContract)).thenReturn(leasingContractResource);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/leasing-contracts-overview"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.leasingContractOverviewResourceList[0].contractId").value(leasingContract.getId()))
+                .andExpect(jsonPath("$._embedded.leasingContractOverviewResourceList[0].monthlyRate").value(leasingContract.getMonthlyRate()));
+    }
+
+    @Test
+    public void testGetLeasingContract() throws Exception {
+        long leasingContractId = 1L;
+
+        LeasingContract leasingContract = new LeasingContract();
+        leasingContract.setId(leasingContractId);
+        leasingContract.setMonthlyRate(BigDecimal.TEN);
+        LeasingContractResource leasingContractResource = new LeasingContractResource();
+        leasingContractResource.setContractNumber(leasingContractId);
+        leasingContractResource.setMonthlyRate(BigDecimal.TEN);
+
+        when(leasingContractRepository.findById(leasingContractId)).thenReturn(Optional.of(leasingContract));
+        when(leasingContractResourceAssembler.toModel(leasingContract)).thenReturn(leasingContractResource);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/leasing-contracts/{id}", leasingContractId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.contractNumber").value(leasingContract.getId()))
+                .andExpect(jsonPath("$.monthlyRate").value(leasingContract.getMonthlyRate()));
     }
 }

@@ -1,7 +1,9 @@
 package com.edayan.leasingcontractor.controllers;
 
 
+import com.edayan.leasingcontractor.models.LeasingContractOverviewResource;
 import com.edayan.leasingcontractor.models.LeasingContractResource;
+import com.edayan.leasingcontractor.models.assemblers.LeasingContractOverviewResourceAssembler;
 import com.edayan.leasingcontractor.models.assemblers.LeasingContractResourceAssembler;
 import com.edayan.leasingcontractor.repository.CustomerRepository;
 import com.edayan.leasingcontractor.repository.LeasingContractRepository;
@@ -32,14 +34,19 @@ public class LeasingContractController {
 
     private final LeasingContractRepository leasingContractRepository;
 
+    private final LeasingContractOverviewResourceAssembler leasingContractOverviewResourceAssembler;
+
     @Autowired
     public LeasingContractController(LeasingContractResourceAssembler leasingContractResourceAssembler,
                                      CustomerRepository customerRepository,
-                                     VehicleRepository vehicleRepository, LeasingContractRepository leasingContractRepository) {
+                                     VehicleRepository vehicleRepository,
+                                     LeasingContractRepository leasingContractRepository,
+                                     LeasingContractOverviewResourceAssembler leasingContractOverviewResourceAssembler) {
         this.leasingContractResourceAssembler = leasingContractResourceAssembler;
         this.customerRepository = customerRepository;
         this.vehicleRepository = vehicleRepository;
         this.leasingContractRepository = leasingContractRepository;
+        this.leasingContractOverviewResourceAssembler = leasingContractOverviewResourceAssembler;
     }
 
     @PostMapping("/leasing-contracts")
@@ -73,6 +80,25 @@ public class LeasingContractController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(CollectionModel.of(contracts));
+    }
+
+    @GetMapping("/leasing-contracts-overview")
+    public ResponseEntity<CollectionModel<LeasingContractOverviewResource>> getLeasingContractsOverview() {
+        List<LeasingContractOverviewResource> leasingContractOverviews = leasingContractRepository.findAll().stream()
+                .map(leasingContractOverviewResourceAssembler::toModel)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(leasingContractOverviews));
+    }
+
+    @GetMapping("/leasing-contracts/{id}")
+    public ResponseEntity<EntityModel<LeasingContractResource>> getLeasingContract(@PathVariable Long id) {
+        LeasingContract leasingContract = leasingContractRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Leasing contract with id " + id + " not found"));
+
+        LeasingContractResource leasingContractResource = leasingContractResourceAssembler.toModel(leasingContract);
+
+        return ResponseEntity.ok(EntityModel.of(leasingContractResource));
     }
 
     @PutMapping("/leasing-contracts/{id}")
