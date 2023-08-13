@@ -24,11 +24,80 @@ The response sample has
     },
     "leasingContracts": {
       "href": "http://localhost:8080/api/leasing-contracts"
+    },
+    "leasingContractsOverview": {
+      "href": "http://localhost:8080/api/leasing-contracts-overview"
     }
   }
 }
 ```
 From this we can navigate to all sub uris, So that React application doesn't need to create uris at client level, but use the response object to navigate to every deep level resources. In other words it is using HATEOS.
+
+#### 1.3.1 Contract Overview
+From Root Api make a GET call to `leasingContractsOverview.href`
+```
+GET:http://localhost:8080/api/leasing-contracts-overview
+// response sample
+{
+  "_embedded": {
+    "leasingContractOverviewResourceList": [
+      {
+        "contractId": 1,
+        "customer": {
+          "id": 1,
+          "firstName": "Aksa",
+          "lastName": "Peter",
+          "birthDate": "2023-08-11",
+          "_links": {
+            "self": {
+              "href": "http://localhost:8080/api/customers/1"
+            },
+            "update": {
+              "href": "http://localhost:8080/api/customers/1"
+            }
+          }
+        },
+        "vehicle": {
+          "id": 2,
+          "modelId": 0,
+          "modelName": "Corolla",
+          "brandName": "Toyota",
+          "year": 2024,
+          "vin": "X1",
+          "price": 500.0,
+          "_links": {
+            "self": {
+              "href": "http://localhost:8080/api/vehicles/2"
+            },
+            "update": {
+              "href": "http://localhost:8080/api/vehicles/2"
+            }
+          }
+        },
+        "monthlyRate": 455.46,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/leasing-contracts/1"
+          }
+        }
+      },
+    ]
+  }
+}
+```
+The UI has specific format to display this.
+Ideally I believe those are client specific logic and not to put in server side in a full stack environment
+(Unless the client is implemented by public and server doesn't need to return HATEOS)
+For example VIN can be displayed as `-` in client if VIN from server is empty
+
+Vehicle and customer data can be constructed as client requirement from above response.
+
+To find the details of single Leasing contract overview use   `_links.self.href`.
+```
+GET:http://localhost:8080/api/leasing-contracts/1
+
+```
+
 
 #### 1.3.2 Customer Details
 Choose _links.customers.href from Root Api result and make POST call
