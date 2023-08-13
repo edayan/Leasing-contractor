@@ -1,9 +1,11 @@
 package com.edayan.leasingcontractor.controllers;
 
+import com.edayan.leasingcontractor.models.VehicleDetailResource;
 import com.edayan.leasingcontractor.models.VehicleResource;
 import com.edayan.leasingcontractor.models.assemblers.VehicleAssembler;
-import com.edayan.leasingcontractor.repository.VehicleRepository;
+import com.edayan.leasingcontractor.models.assemblers.VehicleDetailAssembler;
 import com.edayan.leasingcontractor.repository.VehicleModelRepository;
+import com.edayan.leasingcontractor.repository.VehicleRepository;
 import com.edayan.leasingcontractor.repository.entities.Vehicle;
 import com.edayan.leasingcontractor.repository.entities.VehicleModel;
 import org.springframework.hateoas.CollectionModel;
@@ -21,18 +23,24 @@ public class VehicleController {
     private final VehicleRepository vehicleRepository;
     private final VehicleModelRepository vehicleModelRepository;
 
+    private final VehicleDetailAssembler vehicleDetailAssembler;
+
     private final VehicleAssembler vehicleAssembler;
 
-    public VehicleController(VehicleRepository vehicleRepository, VehicleModelRepository vehicleModelRepository, VehicleAssembler vehicleAssembler) {
+    public VehicleController(VehicleRepository vehicleRepository,
+                             VehicleModelRepository vehicleModelRepository,
+                             VehicleDetailAssembler vehicleDetailAssembler,
+                             VehicleAssembler vehicleAssembler) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleModelRepository = vehicleModelRepository;
+        this.vehicleDetailAssembler = vehicleDetailAssembler;
         this.vehicleAssembler = vehicleAssembler;
     }
 
     @GetMapping("/vehicles")
-    public ResponseEntity<CollectionModel<VehicleResource>> getVehicleDetails() {
-        List<VehicleResource> vehicles = vehicleRepository.findAll().stream()
-                .map(vehicleAssembler::toModel)
+    public ResponseEntity<CollectionModel<VehicleDetailResource>> getVehicleDetails() {
+        List<VehicleDetailResource> vehicles = vehicleRepository.findAll().stream()
+                .map(vehicleDetailAssembler::toModel)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(CollectionModel.of(vehicles));

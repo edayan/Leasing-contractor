@@ -3,7 +3,7 @@
 ##### Rest api details
 Start with first Root api
 ```
-http://localhost:8080/api
+GET:http://localhost:8080/api
 ```
 
 The response sample has
@@ -30,7 +30,7 @@ The response sample has
 ```
 From this we can navigate to all sub uris, So that React application doesn't need to create uris at client level, but use the response object to navigate to every deep level resources. In other words it is using HATEOS.
 
-###### 1.3.2 Customer Details
+#### 1.3.2 Customer Details
 Choose _links.customers.href from Root Api result and make POST call
 
 ```
@@ -80,39 +80,168 @@ PUT:http://localhost:8080/api/customers/1
 ```
 
 
-###### Update Create Vehicle (1.3.3)
-Use Root Api in React Js, and use the objects from the response.
+#### Update Create Vehicle (1.3.3)
+
+To create vehicle details, we need 
+1. Brand
+    - To retrieve brand we can hit the Root Api, from the response choose `vehicleBrands`
+      - hit `vehicleBrands.href`
+        ```
+        GET:http://localhost:8080/api/vehicle-brands
+        //response sample is
+        {
+          "_embedded": {
+          "vehicleBrandResourceList": [
+              {
+              "brandName": "Toyota",
+              "_links": {
+                  "brandDetails": {
+                    "href": "http://localhost:8080/api/vehicle-brands/1"
+                  },
+                  "models": {
+                    "href": "http://localhost:8080/api/vehicle-brands/1/models"
+                }
+              }
+          }]
+        },
+        ```
+    - React application can use a model or select list for the above, once user choose an item, use the `models.href` of that item.
+
+2. Model
+    - From the last response above, hit   
+    ```
+   GET:http://localhost:8080/api/vehicle-brands/1/models
+    // sample response
+    {
+        "_embedded": {
+            "vehicleModelResourceList": [
+                {
+                    "id": 1,
+                    "modelName": "Corolla",
+                    "brand": "Toyota",
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:8080/api/vehicle-brands/1/models"
+                        }
+                    }
+                },
+            ]
+        }
+    }
+   ```  
+
+Once the above is chosen, Use Root Api in React Js, and use the objects from the response.
+use `vehicles.href` and make a Post request 
 
 ```
-Root ->vehicleBrands -> (response) -> models
+POST: http://localhost:8080/api/vehicles
+{
+    "vehicleModelId": 1,
+    "year": 2023,
+    "vin": "X1",
+    "price": 500.0
+}
+```
 
-In other words:
-1. Hit GET:http://localhost:8080/api/vehicle-brands
-2. From the Brand, hit GET:http://localhost:8080/api/vehicle-brands/1/models
-3. Use the 'id' from step 2 response and use it as vehicleModelId
-4. Use POST: http://localhost:8080/api/vehicles
- 
-    {
-        "vehicleModelId": 1,
-        "year": 2023,
-        "vin": "X1",
-        "price": 500.0
-    }
-
-To create Vehicle
-
-To update Vehicle; use
-PUT:http://localhost:8080/api/vehicles/2
-    {
+To update Vehicle; use `vehicles.href` from the Root Api, make a GET request
+```
+GET:http://localhost:8080/api/vehicles
+// response sample
+{
+  "_embedded": {
+    "vehicleResourceList": [
+      {
+        "id": 1,
         "vehicleModelId": 1,
         "year": 2024,
-        "vin": "X1",
-        "price": 500.0
-    }
+        "vin": "Cls5",
+        "price": 50.0,
+        "_links": {
+          "update": {
+            "href": "http://localhost:8080/api/vehicles/1"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+Choose the `_embedded.vehicleResourceList[n]._links.update.href`
 
 ```
+PUT:http://localhost:8080/api/vehicles/2
+{
+    "vehicleModelId": 1,
+    "year": 2024,
+    "vin": "X1",
+    "price": 500.0
+}
+```
 
-###### Leasing Contract (1.3.4)
+
+
+#### Leasing Contract (1.3.4)
+
+To create a Leasing contractor, we need to select one customer, and a vehicle
+
+1. Selecting customer
+   From response of Root Api, choose `_links.customers`, and make a GET call
+```
+GET:http://localhost:8080/api/customers
+{
+  "_embedded": {
+    "customerResourceList": [
+      {
+        "id": 1,
+        "firstName": "Aksa",
+        "lastName": "Peter",
+        "birthDate": "2023-08-11",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/customers/1"
+          },
+          "update": {
+            "href": "http://localhost:8080/api/customers/1"
+          }
+        }
+      },
+    ]
+  }
+}
+```
+Use the above response for populating `Customer` in modal.
+
+2. Selecting vehicles from list
+   - Use Root Api response and choose `_links.vehicles.href` and make a Get call
+
+```
+GET:http://localhost:8080/api/vehicles
+// sample response
+{
+  "_embedded": {
+    "vehicleDetailResourceList": [
+      {
+        "id": 1,
+        "modelId": 0,
+        "modelName": "Corolla",
+        "brandName": "Toyota",
+        "year": 2024,
+        "vin": "Cls5",
+        "price": 50.0,
+        "_links": {
+          "update": {
+            "href": "http://localhost:8080/api/vehicles/1"
+          }
+        }
+      },
+    ]
+  }
+}
+```
+Use the above response to populate Vehicle id.
+
+
+
 Use RootApi and choose leasingContracts to create a post call
 ```
 eg. 
@@ -149,6 +278,7 @@ GET:http://localhost:8080/api/leasing-contracts
   }
 }
 ```
+
 choose `update` url from response to create a PUT call
 ```
 eg.
