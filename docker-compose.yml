@@ -1,14 +1,6 @@
 version: '3'
 services:
-  backend:
-    build:
-      context: ./path/to/your/spring-boot-app
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - database
-
+ 
   # front end will go here once it is been added
   # frontend:
   #   build:
@@ -26,9 +18,14 @@ services:
       MYSQL_PASSWORD: leaser@contract
     volumes:
       - my-datavolume:/var/lib/mysql
+    networks:
+      - mynetwork
     ports:
       - "3306:3306"
 
 
 volumes:
   my-datavolume:
+
+networks:
+  mynetwork:

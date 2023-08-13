@@ -88,6 +88,8 @@ GET:http://localhost:8080/api/leasing-contracts-overview
 The UI has specific format to display this.
 Ideally I believe those are client specific logic and not to put in server side in a full stack environment
 (Unless the client is implemented by public and server doesn't need to return HATEOS)
+
+So the contract overview can be created as from above.
 For example VIN can be displayed as `-` in client if VIN from server is empty
 
 Vehicle and customer data can be constructed as client requirement from above response.
