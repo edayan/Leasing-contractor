@@ -9,8 +9,7 @@ Prerequisits
 - Docker
 
 
-1. First make sure the database is running
-in root folder
+Execute the following on a command line in root folder
 ```
     docker compose up
 ```
