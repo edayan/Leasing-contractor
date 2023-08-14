@@ -1,6 +1,17 @@
 version: '3'
 services:
  
+  backend:
+    build:
+      context: ./restapi
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - mynetwork
+
   # front end will go here once it is been added
   # frontend:
   #   build:

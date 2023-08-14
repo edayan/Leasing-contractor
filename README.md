@@ -7,19 +7,12 @@ Project Leasing contractor
 Prerequisits
 
 - Docker
-- Jdk 11
-- Gradle
+
 
 1. First make sure the database is running
 in root folder
 ```
-    docker compose up database
-```
-
-2. Now run the application
-```
-    cd /restapi
-    gradle bootRun
+    docker compose up
 ```
 
 Open postman and hit
